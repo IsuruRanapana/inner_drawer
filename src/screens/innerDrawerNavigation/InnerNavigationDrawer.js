@@ -3,7 +3,16 @@
 // ***   on 12/13/2022 => 7:27 PM  *** //
 
 
-import {Animated, Image, SafeAreaView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {
+    Animated,
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 import styles from './InnerNavigationDrawer.styles';
 import images from '../../../assets/images';
 import {useRef, useState} from 'react';
@@ -17,6 +26,9 @@ export default function InnerNavigationDrawer({
                                                   profileImage,
                                                   profileSectionButtonText,
                                                   profileSectionButtonOnPress,
+                                                  isLogoutButton,
+                                                  logoutButtonOnPress,
+                                                  tabs,
                                               }) {
     const [currentTab, setCurrentTab] = useState(initialTabName);
     const [showMenu, setShowMenu] = useState(false);
@@ -24,6 +36,12 @@ export default function InnerNavigationDrawer({
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
+    const renderItem = ({item, index}) => {
+        return (
+            <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={item.title}
+                       image={item.image}/>
+        );
+    };
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.drawerContainer}>
@@ -31,25 +49,19 @@ export default function InnerNavigationDrawer({
                     <View>
                         <Image source={profileImage} style={styles.profileImage}/>
                         <Text style={styles.userNameText}>{userNameText}</Text>
-                        <TouchableOpacity onPress={profileSectionButtonOnPress()}>
+                        <TouchableOpacity onPress={profileSectionButtonOnPress}>
                             <Text style={styles.viewProfileBtnText}>{profileSectionButtonText}</Text>
                         </TouchableOpacity>
                     </View>
                     : <></>}
                 <View style={styles.tabBarButtonsContainer}>
-                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'Home'}
-                               image={images.icHome}/>
-                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'Search'}
-                               image={images.icSearch}/>
-                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'Notifications'}
-                               image={images.icBell}/>
-                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'Settings'}
-                               image={images.icSettings}/>
+                    <FlatList data={tabs} renderItem={renderItem} keyExtractor={(item, index) => index.toString()}/>
                 </View>
-                <View>
-                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'LogOut'}
+                {isLogoutButton ? <View>
+                    <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={'LogOut'} isLogout={true}
+                               logoutButtonOnPress={logoutButtonOnPress}
                                image={images.icLogout}/>
-                </View>
+                </View> : <></>}
             </View>
 
             <Animated.View style={{
