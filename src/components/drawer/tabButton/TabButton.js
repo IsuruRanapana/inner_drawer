@@ -5,13 +5,14 @@
 
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 
-export default function TabButton({currentTab, setCurrentTab, title, image}) {
+export default function TabButton({currentTab, setCurrentTab, title, image, isLogout=false,tabButtonOnPress, logoutButtonOnPress}) {
     return (
         <TouchableOpacity onPress={() => {
-            if (title === 'LogOut') {
-                // todo: Logout function should be implemented
+            if (isLogout) {
+                logoutButtonOnPress();
             } else {
                 setCurrentTab(title);
+                tabButtonOnPress();
             }
         }}>
             <View style={{
