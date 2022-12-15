@@ -11,11 +11,6 @@ export default styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },
-    titleText: {
-        color: 'aqua',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
     drawerContainer: {
         justifyContent: 'flex-start',
         padding: 15,
@@ -39,5 +34,6 @@ export default styles = StyleSheet.create({
     tabBarButtonsContainer:{
         flexGrow:1,
         marginTop:50,
+        height:400,
     },
 });

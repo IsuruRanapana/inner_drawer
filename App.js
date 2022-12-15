@@ -6,7 +6,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <StatusBar hidden={true}/>
-        <InnerNavigationDrawer initialTabName={'Home'}/>
+        <InnerNavigationDrawer initialTab={'Home'}/>
       </NavigationContainer>
   );
 }

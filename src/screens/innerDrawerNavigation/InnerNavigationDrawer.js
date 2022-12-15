@@ -15,12 +15,12 @@ import {
 } from 'react-native';
 import styles from './InnerNavigationDrawer.styles';
 import images from '../../../assets/images';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {TabButton} from '../../components';
 
 export default function InnerNavigationDrawer({
                                                   navigation,
-                                                  initialTabName,
+                                                  initialTab,
                                                   isProfileSection,
                                                   userNameText,
                                                   profileImage,
@@ -29,8 +29,18 @@ export default function InnerNavigationDrawer({
                                                   isLogoutButton,
                                                   logoutButtonOnPress,
                                                   tabs,
+                                                  drawerBackgroundStyles,
+                                                  profileImageStyles,
+                                                  profileSectionUserNameStyles,
+                                                  profileSectionButtonStyles,
+                                                  tabButtonEnabledTextColor,
+                                                  tabButtonDisabledTextColor,
+                                                  tabButtonEnabledBackgroundColor,
+
+                                                  children,
                                               }) {
-    const [currentTab, setCurrentTab] = useState(initialTabName);
+
+    const [currentTab, setCurrentTab] = useState(initialTab);
     const [showMenu, setShowMenu] = useState(false);
     const offsetValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -39,18 +49,22 @@ export default function InnerNavigationDrawer({
     const renderItem = ({item, index}) => {
         return (
             <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab} title={item.title}
-                       image={item.image}/>
+                       image={item.image} index={index} tabButtonEnabledTextColor={tabButtonEnabledTextColor}
+                       tabButtonDisabledTextColor={tabButtonDisabledTextColor}
+                       tabButtonEnabledBackgroundColor={tabButtonEnabledBackgroundColor}
+            />
         );
     };
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{...styles.container, ...drawerBackgroundStyles}}>
             <View style={styles.drawerContainer}>
                 {isProfileSection ?
                     <View>
-                        <Image source={profileImage} style={styles.profileImage}/>
-                        <Text style={styles.userNameText}>{userNameText}</Text>
+                        <Image source={profileImage} style={{...styles.profileImage, ...profileImageStyles}}/>
+                        <Text style={{...styles.userNameText, ...profileSectionUserNameStyles}}>{userNameText}</Text>
                         <TouchableOpacity onPress={profileSectionButtonOnPress}>
-                            <Text style={styles.viewProfileBtnText}>{profileSectionButtonText}</Text>
+                            <Text
+                                style={{...styles.viewProfileBtnText, ...profileSectionButtonStyles}}>{profileSectionButtonText}</Text>
                         </TouchableOpacity>
                     </View>
                     : <></>}
@@ -147,28 +161,7 @@ export default function InnerNavigationDrawer({
 
                         </TouchableOpacity>
 
-                        <Text style={{
-                            fontSize: 30,
-                            fontWeight: 'bold',
-                            color: 'black',
-                            paddingTop: 20,
-                        }}>{currentTab}</Text>
-
-                        <Image source={images.photo} style={{
-                            width: '100%',
-                            height: 300,
-                            borderRadius: 15,
-                            marginTop: 25,
-                        }}></Image>
-
-                        <Text style={{
-                            fontSize: 20,
-                            fontWeight: 'bold'
-                            , paddingTop: 15,
-                            paddingBottom: 5,
-                        }}>{'abbbdhe fajnfa'}</Text>
-
-                        <Text style={{}}>{'hbfannd ba a dabjnn aheh ads'}</Text>
+                        {children[currentTab]}
 
                     </Animated.View>
                 </TouchableWithoutFeedback>

@@ -5,21 +5,31 @@
 
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 
-export default function TabButton({currentTab, setCurrentTab, title, image, isLogout=false,tabButtonOnPress, logoutButtonOnPress}) {
+export default function TabButton({
+                                      currentTab,
+                                      setCurrentTab,
+                                      title,
+                                      image,
+                                      isLogout = false,
+                                      logoutButtonOnPress,
+                                      index,
+                                      tabButtonEnabledTextColor = '#5359D1',
+                                      tabButtonDisabledTextColor = 'white',
+                                      tabButtonEnabledBackgroundColor = 'white',
+                                  }) {
     return (
         <TouchableOpacity onPress={() => {
             if (isLogout) {
                 logoutButtonOnPress();
             } else {
-                setCurrentTab(title);
-                tabButtonOnPress();
+                setCurrentTab(index);
             }
         }}>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 8,
-                backgroundColor: currentTab === title ? 'white' : 'transparent',
+                backgroundColor: currentTab === index ? tabButtonEnabledBackgroundColor : 'transparent',
                 paddingLeft: 13,
                 paddingRight: 35,
                 borderRadius: 8,
@@ -28,14 +38,14 @@ export default function TabButton({currentTab, setCurrentTab, title, image, isLo
 
                 <Image source={image} style={{
                     width: 25, height: 25,
-                    tintColor: currentTab === title ? '#5359D1' : 'white',
+                    tintColor: currentTab === index ? tabButtonEnabledTextColor : tabButtonDisabledTextColor,
                 }}></Image>
 
                 <Text style={{
                     fontSize: 15,
                     fontWeight: 'bold',
                     paddingLeft: 15,
-                    color: currentTab === title ? '#5359D1' : 'white',
+                    color: currentTab === index ? tabButtonEnabledTextColor : tabButtonDisabledTextColor,
                 }}>{title}</Text>
 
             </View>
