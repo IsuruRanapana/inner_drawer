@@ -9,7 +9,15 @@ import images from '../../../assets/images';
 import {useRef, useState} from 'react';
 import {TabButton} from '../../components';
 
-export default function InnerNavigationDrawer({navigation, initialTabName, isProfileSection, userNameText, profileImage, profileSectionButtonText}) {
+export default function InnerNavigationDrawer({
+                                                  navigation,
+                                                  initialTabName,
+                                                  isProfileSection,
+                                                  userNameText,
+                                                  profileImage,
+                                                  profileSectionButtonText,
+                                                  profileSectionButtonOnPress,
+                                              }) {
     const [currentTab, setCurrentTab] = useState(initialTabName);
     const [showMenu, setShowMenu] = useState(false);
     const offsetValue = useRef(new Animated.Value(0)).current;
@@ -23,7 +31,7 @@ export default function InnerNavigationDrawer({navigation, initialTabName, isPro
                     <View>
                         <Image source={profileImage} style={styles.profileImage}/>
                         <Text style={styles.userNameText}>{userNameText}</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={profileSectionButtonOnPress()}>
                             <Text style={styles.viewProfileBtnText}>{profileSectionButtonText}</Text>
                         </TouchableOpacity>
                     </View>
