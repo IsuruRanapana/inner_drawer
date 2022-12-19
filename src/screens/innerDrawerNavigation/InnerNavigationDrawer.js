@@ -36,7 +36,11 @@ export default function InnerNavigationDrawer({
                                                   tabButtonEnabledTextColor,
                                                   tabButtonDisabledTextColor,
                                                   tabButtonEnabledBackgroundColor,
-
+                                                  offset = 230,
+                                                  scale = 0.88,
+                                                  offsetCloseButton = -30,
+                                                  rotateDegree = '-12deg',
+                                                  transformYVal = -150,
                                                   children,
                                               }) {
 
@@ -45,6 +49,12 @@ export default function InnerNavigationDrawer({
     const offsetValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
+    const rotateValue = useRef(new Animated.Value(0)).current;
+    const transformYValue = useRef(new Animated.Value(0)).current;
+    const interpolateRotating = rotateValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', rotateDegree],
+    });
 
     const renderItem = ({item, index}) => {
         return (
@@ -89,34 +99,59 @@ export default function InnerNavigationDrawer({
                 paddingHorizontal: 15,
                 paddingVertical: 20,
                 borderRadius: showMenu ? 15 : 0,
+                elevation:2,
+                shadowColor: '#000',
+                shadowOffset: { width: 200, height: 20},
+                shadowOpacity: 1,
+                shadowRadius: 12,
                 // Transforming View...
                 transform: [
                     {scale: scaleValue},
                     {translateX: offsetValue},
+                    {rotateZ: interpolateRotating},
+                    {translateY: transformYValue},
                 ],
             }}>
+                {showMenu?<View style={{
+                    flexGrow: 1,
+                    backgroundColor: 'black',
+                }
+                }></View>:<></>}
                 <TouchableWithoutFeedback onPress={() => {
                     if (showMenu) {
                         Animated.timing(scaleValue, {
-                            toValue: showMenu ? 1 : 0.88,
+                            toValue: showMenu ? 1 : scale,
                             duration: 300,
                             useNativeDriver: true,
                         })
                             .start();
 
                         Animated.timing(offsetValue, {
-                            toValue: showMenu ? 0 : 230,
+                            toValue: showMenu ? 0 : offset,
                             duration: 300,
                             useNativeDriver: true,
                         })
                             .start();
 
                         Animated.timing(closeButtonOffset, {
-                            toValue: !showMenu ? -30 : 0,
+                            toValue: !showMenu ? offsetCloseButton : 0,
                             duration: 300,
                             useNativeDriver: true,
                         })
                             .start();
+                        Animated.timing(transformYValue, {
+                            toValue: showMenu ? 0 : transformYVal,
+                            duration: 300,
+                            useNativeDriver: true,
+                        })
+                            .start();
+
+                        Animated.timing(rotateValue, {
+                            toValue: showMenu ? 0 : 1,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }).start();
+
                         setShowMenu(!showMenu);
 
                     }
@@ -128,25 +163,37 @@ export default function InnerNavigationDrawer({
                     }}>
                         <TouchableOpacity onPress={() => {
                             Animated.timing(scaleValue, {
-                                toValue: showMenu ? 1 : 0.88,
+                                toValue: showMenu ? 1 : scale,
                                 duration: 300,
                                 useNativeDriver: true,
                             })
                                 .start();
 
                             Animated.timing(offsetValue, {
-                                toValue: showMenu ? 0 : 230,
+                                toValue: showMenu ? 0 : offset,
                                 duration: 300,
                                 useNativeDriver: true,
                             })
                                 .start();
 
                             Animated.timing(closeButtonOffset, {
-                                toValue: !showMenu ? -30 : 0,
+                                toValue: !showMenu ? offsetCloseButton : 0,
                                 duration: 300,
                                 useNativeDriver: true,
                             })
                                 .start();
+                            Animated.timing(transformYValue, {
+                                toValue: showMenu ? 0 : transformYVal,
+                                duration: 300,
+                                useNativeDriver: true,
+                            })
+                                .start();
+
+                            Animated.timing(rotateValue, {
+                                toValue: showMenu ? 0 : 1,
+                                duration: 300,
+                                useNativeDriver: true,
+                            }).start();
 
                             setShowMenu(!showMenu);
                         }}>
@@ -155,7 +202,7 @@ export default function InnerNavigationDrawer({
                                 width: 20,
                                 height: 20,
                                 tintColor: 'black',
-                                marginTop: 40,
+                                marginTop: showMenu?40:10,
 
                             }}></Image>
 
